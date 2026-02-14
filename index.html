@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Will You Be My Valentine?</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    body {
+      background: linear-gradient(to right, #ff9a9e, #fad0c4);
+    }
+
+    @keyframes dramaticZoom {
+      from { transform: scale(1); }
+      to { transform: scale(1.12); }
+    }
+
+    .zoomEffect {
+      animation: dramaticZoom 2s ease-in-out forwards;
+    }
+  </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen text-center">
+
+  <main class="bg-white p-8 rounded-3xl shadow-xl max-w-md w-full">
+    
+    <h1 id="mainTitle" class="text-3xl font-bold mb-4">
+      Will you be my Valentine? 💕
+    </h1>
+    
+    <img id="mainImage" 
+         src="images/image1.gif" 
+         class="mx-auto rounded-2xl mb-6 w-72 h-72 object-contain transition-all duration-300">
+
+    <div class="flex justify-center gap-4 mb-4">
+      <button id="yesButton"
+        class="bg-pink-500 text-white px-6 py-3 rounded-xl font-bold transition-all duration-300">
+        Yes 💖
+      </button>
+
+      <button id="noButton"
+        class="bg-gray-300 px-6 py-3 rounded-xl font-bold">
+        No 😢
+      </button>
+    </div>
+
+    <div id="pleadBox" 
+         class="hidden bg-pink-100 text-pink-700 font-semibold py-2 px-4 rounded-xl">
+         pretty please
+    </div>
+
+  </main>
+
+<script>
+const images = [
+  "images/image1.gif",
+  "images/image2.gif",
+  "images/image3.gif",
+  "images/image4.gif",
+  "images/image5.gif",
+  "images/asdfg.jpg",   // ← YOUR unicorn pic here
+  "images/image7.gif"
+];
+
+const pleadMessages = [
+  "Pretty please 🥺",
+  "Pookie please 💕",
+  "I'm gonna cry...",
+  "Don't do this to me Baby Girl 😭",
+  "You know you want to...",
+  "I'll buy you food 🍕"
+];
+
+let noClicks = 0;
+let yesSize = 1;
+
+const yesButton = document.getElementById("yesButton");
+const noButton = document.getElementById("noButton");
+const mainImage = document.getElementById("mainImage");
+const pleadBox = document.getElementById("pleadBox");
+const mainTitle = document.getElementById("mainTitle");
+
+noButton.addEventListener("click", () => {
+  noClicks++;
+
+  // Show pleading box
+  pleadBox.classList.remove("hidden");
+  pleadBox.innerText =
+    pleadMessages[Math.min(noClicks - 1, pleadMessages.length - 1)];
+
+  // Reset zoom class before changing image
+  mainImage.classList.remove("zoomEffect");
+
+  // Change image safely
+  if (noClicks < images.length) {
+    mainImage.src = images[noClicks];
+  }
+
+  // If it's the unicorn image (5th No click)
+  if (noClicks === 5) {
+    setTimeout(() => {
+      mainImage.classList.add("zoomEffect");
+    }, 100);
+  }
+
+  // Grow YES button
+  yesSize += 0.25;
+  yesButton.style.transform = `scale(${yesSize})`;
+});
+
+yesButton.addEventListener("click", () => {
+  mainImage.classList.remove("zoomEffect");
+  mainImage.src = images[6];
+
+  mainTitle.innerText = "YAYYY I LOVE YOU ❤️";
+
+  confetti({
+    particleCount: 250,
+    spread: 100,
+    origin: { y: 0.6 },
+    colors: ["#ff69b4", "#ff1493", "#ff85c1", "#ffc0cb"]
+  });
+
+  pleadBox.classList.add("hidden");
+  noButton.classList.add("hidden");
+  yesButton.classList.add("hidden");
+});
+</script>
+
+</body>
+</html>
